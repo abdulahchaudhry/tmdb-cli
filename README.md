@@ -169,3 +169,5 @@ This project is intended for learning and demonstration purposes.
 Movie data is provided by [The Movie Database (TMDB)](https://www.themoviedb.org/).
 
 This project is not affiliated with or endorsed by TMDB.
+
+The project details: https://roadmap.sh/projects/tmdb-cli
