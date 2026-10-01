@@ -2,81 +2,104 @@
 
 A simple command-line movie search tool built with Python and the **TMDB API**.
 
-Search for movies directly from your terminal, choose from multiple results, and view detailed movie information in a clean table format.
+Search for movies directly from your terminal, pick from the top matches, and view detailed movie information in a clean table.
 
 ## ✨ Features
 
-* 🔎 Search movies by title
-* 📋 Display multiple results in a table
-* 🎯 Select a movie interactively
-* ⭐ Display movie ratings
-* 📅 Display release dates
-* 🗳 Display vote counts
-* 🌐 Display original language
-* 📝 Display movie overview
-* 🔐 Store your TMDB API key securely in `.env`
-* ⚡ Simple and lightweight CLI
+- 🔎 Search movies by title
+- 📋 Top 10 matches shown in a table, sorted by popularity
+- 🎯 Select a movie interactively
+- ⭐ Rating, 📅 release date, 🗳 vote count, 🌐 original language, 📝 overview
+- 🚀 One-command setup: installs dependencies, asks for your API key, and verifies it
+- 🔐 API key stored locally in `.env` (git-ignored, never committed)
+- 🛑 Clear error messages for invalid API key, rate limits, and network problems
+- ⚡ Simple and lightweight
 
 ## 🛠️ Built With
 
-* **Python**
-* **Requests** — API requests
-* **python-dotenv** — Environment variable management
-* **Rich** — Terminal tables and formatting
-* **TMDB API** — Movie data
+- **Python**
+- **Requests** — API requests
+- **python-dotenv** — Environment variable management
+- **Rich** — Terminal tables and formatting
+- **TMDB API** — Movie data
 
-## 📦 Installation
-
-### 1. Clone the repository
+## 🚀 Quick Start
 
 ```bash
 git clone https://github.com/abdulahchaudhry/tmdb-cli.git
 cd tmdb-cli
+python setup.py
 ```
 
-### 2. Install dependencies
+On macOS/Linux, use `python3` instead of `python` if `python` isn't found.
+
+On the first run, `setup.py` will:
+
+1. Install the dependencies from `requirements.txt` (only if something is missing)
+2. Ask for your TMDB API key and check that TMDB accepts it
+3. Save the key to `.env`
+4. Start the app and prompt: `Enter movie name:`
+
+On later runs, `python setup.py` skips straight to the prompt. It only asks for a key again if the saved one is missing or rejected.
+
+### 🔑 Getting a TMDB API key
+
+Create a free account on [The Movie Database](https://www.themoviedb.org/), then go to **Settings → API** and copy the **API Key (v3)**. You'll paste it when `setup.py` asks.
+
+### 📦 Manual install (optional)
+
+If you'd rather not use `setup.py` for the install step:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Get a TMDB API Key
+Then create a `.env` file in the project folder:
 
-Create an account on [The Movie Database](https://www.themoviedb.org/) and obtain an API key.
-
-### 4. Create a `.env` file
-
-Create a `.env` file in the project directory:
-
-```env
+```
 TMDB_API_KEY=your_api_key_here
 ```
 
-> **Important:** Never commit your `.env` file or expose your API key publicly.
+> **Important:** Never commit your `.env` file or share your API key publicly.
 
-## 🚀 Usage
+### ⚠️ "externally managed environment" error
 
-Run the program by providing a movie title:
+On some systems (recent Debian, Ubuntu, and others), `pip install` is blocked system-wide. Use a virtual environment instead:
 
 ```bash
-python main.py "Inception"
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+python setup.py
 ```
 
-You can also search for movies with multiple words:
+Activate the venv again (the `source` line) in any new terminal before running the app.
+
+## 💻 Usage
+
+Run the app and type a title when prompted:
+
+```bash
+python main.py
+```
+
+Or pass the title directly:
 
 ```bash
 python main.py "The Dark Knight"
 ```
 
+Setup also launches the app for you, so `python setup.py` works as a start command too.
+
 ## 🔄 How It Works
 
-The application follows a simple workflow:
-
-```text
+```
 Movie Title
      │
      ▼
 TMDB API Search
+     │
+     ▼
+Sort by popularity, keep top 10
      │
      ▼
 Results Found?
@@ -96,17 +119,18 @@ Show Details   Show Results Table
               Show Details
 ```
 
-If only one movie matches the search, its details are displayed immediately.
-
-If multiple movies are found, they are displayed in a table. Enter the number of the movie you want to view.
-
-You can enter `q` to quit when selecting from multiple results.
+- If only one movie matches, its details are shown immediately.
+- If several match, the 10 most popular appear in a table. Enter the number of the movie you want, or `q` to quit.
 
 ## 📊 Example
 
+Illustrative output (your results will vary):
+
 ### Multiple Results
 
-```text
+```
+Enter movie name: Inception
+
 🔍 Searching for: Inception
 
 📽 Multiple matches found. Pick one:
@@ -115,15 +139,15 @@ You can enter `q` to quit when selecting from multiple results.
 ┃ # ┃ Title                 ┃ Year ┃
 ┡━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━┩
 │ 1 │ Inception             │ 2010 │
-│ 2 │ Inception: The Cobol  │ 2010 │
+│ 2 │ ...                   │ .... │
 └───┴───────────────────────┴──────┘
 
-Enter a number (1-2) or 'q' to quit:
+ Enter a number (1-10) or 'q' to quit:
 ```
 
 ### Movie Details
 
-```text
+```
               🎬 Movie Details
 ┏━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Field     ┃ Details                      ┃
@@ -131,22 +155,33 @@ Enter a number (1-2) or 'q' to quit:
 │ Title     │ Inception                    │
 │ Release   │ 2010-07-15                   │
 │ Rating    │ 8.4 / 10                     │
-│ Votes     │ 36,000+                      │
+│ Votes     │ 36000                        │
 │ Language  │ EN                           │
-│ Overview  │ A thief who steals secrets... │
+│ Overview  │ A thief who steals secrets...│
 └───────────┴──────────────────────────────┘
 ```
 
+## 🧯 Troubleshooting
+
+| Message | Fix |
+| ------- | --- |
+| `Invalid TMDB API key` | Run `python setup.py` and enter a valid key |
+| `Missing TMDB_API_KEY` | Run `python setup.py` to create `.env` |
+| `Too many requests` | Wait a moment and try again |
+| `Couldn't reach TMDB` | Check your internet connection |
+
 ## 📁 Project Structure
 
-```text
+```
 tmdb-cli/
-├── main.py
+├── main.py            # the CLI app
+├── setup.py           # installs deps, saves API key, launches the app
 ├── requirements.txt
-├── .env
 ├── .gitignore
 └── README.md
 ```
+
+`.env` is created locally by `setup.py` and is git-ignored, so it isn't part of the repo.
 
 ## 🔑 Environment Variables
 
@@ -156,9 +191,9 @@ tmdb-cli/
 
 ## 📋 Requirements
 
-* Python 3.8+
-* Internet connection
-* TMDB API key
+- Python 3.8+
+- Internet connection
+- TMDB API key (free)
 
 ## 📄 License
 
@@ -170,4 +205,4 @@ Movie data is provided by [The Movie Database (TMDB)](https://www.themoviedb.org
 
 This project is not affiliated with or endorsed by TMDB.
 
-The project details: https://roadmap.sh/projects/tmdb-cli
+Inspired by the roadmap.sh project: <https://roadmap.sh/projects/tmdb-cli>
