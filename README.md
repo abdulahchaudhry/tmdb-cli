@@ -35,10 +35,14 @@ python setup.py
 ```bash
 git clone https://github.com/abdulahchaudhry/tmdb-cli.git
 cd tmdb-cli
+```
+```bash
 # Creating a virtual env
-python -m venv .venv
-source .venv/bin/activate   
-# use python3 if python nt found    
+python -m venv .venv          # use python3 if python not found
+source .venv/bin/activate 
+```
+```bash  
+# use python3 if python not found    
 python setup.py
 ```
 
