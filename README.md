@@ -25,13 +25,22 @@ Search for movies directly from your terminal, pick from the top matches, and vi
 
 ## 🚀 Quick Start
 
+### Windows
 ```bash
 git clone https://github.com/abdulahchaudhry/tmdb-cli.git
 cd tmdb-cli
 python setup.py
 ```
-
-On macOS/Linux, use `python3` instead of `python` if `python` isn't found.
+### Linux/MacOS
+```bash
+git clone https://github.com/abdulahchaudhry/tmdb-cli.git
+cd tmdb-cli
+# Creating a virtual env
+python -m venv .venv
+source .venv/bin/activate   
+# use python3 if python nt found    
+python setup.py
+```
 
 On the first run, `setup.py` will:
 
@@ -46,31 +55,6 @@ On later runs, `python setup.py` skips straight to the prompt. It only asks for 
 
 Create a free account on [The Movie Database](https://www.themoviedb.org/), then go to **Settings → API** and copy the **API Key (v3)**. You'll paste it when `setup.py` asks.
 
-### 📦 Manual install (optional)
-
-If you'd rather not use `setup.py` for the install step:
-
-```bash
-pip install -r requirements.txt
-```
-
-Then create a `.env` file in the project folder:
-
-```
-TMDB_API_KEY=your_api_key_here
-```
-
-> **Important:** Never commit your `.env` file or share your API key publicly.
-
-### ⚠️ "externally managed environment" error
-
-On some systems (recent Debian, Ubuntu, and others), `pip install` is blocked system-wide. Use a virtual environment instead:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-python setup.py
-```
 
 Activate the venv again (the `source` line) in any new terminal before running the app.
 
